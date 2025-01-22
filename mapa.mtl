@@ -1,0 +1,773 @@
+# Blender 4.3.2 MTL File: 'None'
+# www.blender.org
+
+newmtl TexturesCom_Buildings18thCentury0035_1_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_BuildingsTallHouse0057_S_diffuse.png
+
+newmtl TexturesCom_BuildingsDerelict0001_M
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_BuildingsTallHouse0057_S_diffuse.png
+
+newmtl TexturesCom_BuildingsDerelict0068_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd structure-toile_diffuse.png
+
+newmtl TexturesCom_BuildingsDerelict0132_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd structure-toile_diffuse.png
+
+newmtl TexturesCom_BuildingsHouseOld0005_M
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_BuildingsTallHouse0057_S_diffuse.png
+
+newmtl TexturesCom_BuildingsHouseOld0007_M
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_BuildingsTallHouse0057_S_diffuse.png
+
+newmtl TexturesCom_BuildingsHouseOld0203_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd structure-toile_diffuse.png
+
+newmtl TexturesCom_BuildingsTallHouse0057_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_BuildingsTallHouse0057_S_diffuse.png
+
+newmtl TexturesCom_DoorsWoodPanelled0239_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_BuildingsTallHouse0057_S_diffuse.png
+
+newmtl TexturesCom_HighRiseResidential0035_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd structure-toile_diffuse.png
+
+newmtl TexturesCom_HighRiseTowers0146_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_HighRiseTowers0146_S_diffuse.png
+
+newmtl TexturesCom_MetalFences0005_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_MetalFences0005_S_diffuse.png
+
+newmtl TexturesCom_NaturePlants0005_1_alphamasked_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1000.000000
+illum 2
+map_Kd TexturesCom_NaturePlants0005_1_alphamasked_S_diffuse.png
+map_Ke TexturesCom_NaturePlants0005_1_alphamasked_S_emissive.png
+map_d TexturesCom_NaturePlants0005_1_alphamasked_S_diffuse.png
+
+newmtl TexturesCom_NaturePlants0038_1_alphamasked_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Ke TexturesCom_NaturePlants0038_1_alphamasked_S_emissive.png
+
+newmtl TexturesCom_NaturePlants0052_1_alphamasked_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+illum 2
+map_Kd TexturesCom_NaturePlants0052_1_alphamasked_S_diffuse.png
+map_d TexturesCom_NaturePlants0052_1_alphamasked_S_diffuse.png
+
+newmtl TexturesCom_RoadsBarriers0011_4_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_RoadsBarriers0011_4_S_diffuse.png
+
+newmtl TexturesCom_RoadsBarriers0011_4_S.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_RoadsBarriers0011_4_S_diffuse.png
+
+newmtl TexturesCom_RoadsBarriers0011_4_S.002
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_RoadsBarriers0011_4_S_diffuse.png
+
+newmtl TexturesCom_RoadsBarriers0011_4_S.003
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_RoadsBarriers0011_4_S_diffuse.png
+
+newmtl TexturesCom_RoadsBarriers0011_4_S.004
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_RoadsBarriers0011_4_S_diffuse.png
+
+newmtl TexturesCom_RoadsBarriers0011_4_S.005
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_RoadsBarriers0011_4_S_diffuse.png
+
+newmtl TexturesCom_RoadsBarriers0011_5_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_RoadsBarriers0011_4_S_diffuse.png
+
+newmtl TexturesCom_RoadsBarriers0011_5_S.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_RoadsBarriers0011_4_S_diffuse.png
+
+newmtl TexturesCom_RoadsBarriers0011_5_S.002
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_RoadsBarriers0011_4_S_diffuse.png
+
+newmtl TexturesCom_RoadsBarriers0011_5_S.003
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_RoadsBarriers0011_4_S_diffuse.png
+
+newmtl TexturesCom_RoadsBarriers0011_5_S.004
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_RoadsBarriers0011_4_S_diffuse.png
+
+newmtl TexturesCom_RoadsBarriers0011_6_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_RoadsBarriers0011_4_S_diffuse.png
+
+newmtl TexturesCom_RoadsBarriers0011_6_S.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_RoadsBarriers0011_4_S_diffuse.png
+
+newmtl TexturesCom_RoadsBarriers0011_6_S.002
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_RoadsBarriers0011_4_S_diffuse.png
+
+newmtl TexturesCom_RoadsBarriers0021_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_RoadsBarriers0011_4_S_diffuse.png
+
+newmtl TexturesCom_RoadsBarriers0021_S.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_RoadsBarriers0011_4_S_diffuse.png
+
+newmtl TexturesCom_Shops0175_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd structure-toile_diffuse.png
+
+newmtl TexturesCom_Shops0244_S
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd structure-toile_diffuse.png
+
+newmtl auvent
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_BuildingsTallHouse0057_S_diffuse.png
+
+newmtl ciel
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd ciel_diffuse.jpeg
+map_Ke ciel_diffuse.jpeg
+
+newmtl cote-batiment
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_BuildingsTallHouse0057_S_diffuse.png
+
+newmtl cote-batiment.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_BuildingsTallHouse0057_S_diffuse.png
+
+newmtl cote-batiment.002
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_BuildingsTallHouse0057_S_diffuse.png
+
+newmtl cote-batiment.003
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_BuildingsTallHouse0057_S_diffuse.png
+
+newmtl cote-batiment.004
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd structure-toile_diffuse.png
+
+newmtl cote-batiment.005
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd structure-toile_diffuse.png
+
+newmtl cote-batiment.007
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd structure-toile_diffuse.png
+
+newmtl cote-batiment.008
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd structure-toile_diffuse.png
+
+newmtl cote-batiment.009
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd structure-toile_diffuse.png
+
+newmtl cote-batiment.010
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd TexturesCom_BuildingsTallHouse0057_S_diffuse.png
+
+newmtl glass-voiture
+Ns 159.999985
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 0.000000
+illum 9
+
+newmtl glass-voiture.001
+Ns 159.999985
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.080000 0.080000 0.080000
+Ni 1000.000000
+d 0.000000
+illum 9
+
+newmtl grass
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd grass_diffuse.png
+
+newmtl gravas
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd gravas_diffuse.png
+
+newmtl ivy-leaves
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd ivy-tronc_diffuse.png
+map_Ke ivy-leaves.001_emissive.png
+
+newmtl ivy-leaves.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd ivy-tronc.001_diffuse.png
+map_Ke ivy-leaves.001_emissive.png
+
+newmtl ivy-tronc
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd ivy-tronc_diffuse.png
+map_Ke ivy-tronc_diffuse.png
+
+newmtl ivy-tronc.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd ivy-tronc.001_diffuse.png
+map_Ke ivy-tronc.001_diffuse.png
+
+newmtl jante
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd voiture.001_diffuse.png
+map_Ns voiture.001_diffuse.png
+
+newmtl jante.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd voiture.001_diffuse.png
+map_Bump -bm 1.000000 voiture.001_diffuse.png
+
+newmtl monticule
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd monticule_diffuse.png
+
+newmtl paves-trottoir
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd monticule_diffuse.png
+
+newmtl paves-trottoir.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd monticule_diffuse.png
+
+newmtl paves-trottoir.002
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd monticule_diffuse.png
+
+newmtl route
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd route_diffuse.png
+
+newmtl structure-toile
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd structure-toile_diffuse.png
+
+newmtl toile
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd structure-toile_diffuse.png
+
+newmtl trottoir
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd monticule_diffuse.png
+
+newmtl trottoir.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd monticule_diffuse.png
+
+newmtl trottoir.002
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd monticule_diffuse.png
+
+newmtl vide-voiture
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd voiture.001_diffuse.png
+
+newmtl vide-voiture.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd voiture.001_diffuse.png
+
+newmtl voiture
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd voiture.001_diffuse.png
+map_Ns voiture.001_diffuse.png
+map_Ke voiture.001_diffuse.png
+
+newmtl voiture.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd voiture.001_diffuse.png
+
+newmtl wall
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd wall_diffuse.png
+
+newmtl wall.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd wall.buidings.001_diffuse.png
+
+newmtl wall.002
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd wall.002_diffuse.png
+
+newmtl wall.003
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd wall.002_diffuse.png
+
+newmtl wall.buidings
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd wall.buidings.001_diffuse.png
+
+newmtl wall.buidings.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd wall.buidings.001_diffuse.png
+
+newmtl wall.buidings.002
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd wall.002_diffuse.png
+
+newmtl wall.buidings.003
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd wall.002_diffuse.png
