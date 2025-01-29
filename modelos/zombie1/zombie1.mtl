@@ -1,0 +1,72 @@
+# Blender 4.3.2 MTL File: 'None'
+# www.blender.org
+
+newmtl blue_light
+Ns 159.999985
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.459414 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.587875 1.681438
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl body
+Ns 159.999985
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd body_baseColor.png
+map_Ke body_emissive.png
+
+newmtl standardSurface2
+Ns 198.013855
+Ka 1.000000 1.000000 1.000000
+Kd 0.144403 0.144403 0.144403
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl tomb1
+Ns 159.999985
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd tomb1_baseColor.png
+
+newmtl uv_unwarpphong1
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.261889 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.985066 6.685556
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl wood_roots_1
+Ns 159.999985
+Ka 1.000000 1.000000 1.000000
+Ks 0.216221 0.216221 0.216221
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd wood_roots_1_baseColor.png
+map_Ke wood_roots_1_emissive.png
+
+newmtl wood_roots_2
+Ns 159.999985
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd wood_roots_2_baseColor.png
+map_Ke wood_roots_2_emissive.png
