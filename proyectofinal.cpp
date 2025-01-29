@@ -25,11 +25,9 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 //gravedad
-float gravity = -9.8f; // Gravedad (en unidades/s≤)
-float verticalVelocity = 0.0f; // Velocidad vertical de la c·mara
+float gravity = -9.8f; // Gravedad (en unidades/s¬≤)
+float verticalVelocity = 0.0f; // Velocidad vertical de la c√°mara
 const float groundLevel = 0.0f; // Nivel del suelo
-
-
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -40,8 +38,6 @@ bool firstMouse = true;
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
-
-
 
 int main()
 {
@@ -95,13 +91,11 @@ int main()
     // load models
     // -----------
 
-    Model escenarioModel("model/escenario/escenario.obj");
-    Model necromorphModel("model/necromorph/necromorph.obj");
-    Model zombieDogModel("model/zombiedog/zombiedog.obj");
-    Model zombie1Model("model/zombie1/zombie1.obj");
-    Model zombie2Model("model/zombie2/zombie2.obj");
-    Model zombie3Model("model/zombie3/zombie3.obj");
-
+    Model escenarioModel("modelos/escenario/escenario.obj");
+    Model necromorphModel("modelos/necromorph/necromorph.obj");
+    Model zombieDogModel("modelos/zombiedog/zombiedog.obj");
+    Model zombie1Model("modelos/zombie1/zombie1.obj");
+    Model zombie2Model("modelos/zombie2/zombie2.obj");
 
     // draw in wireframe
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -137,10 +131,10 @@ int main()
         ourShader.setMat4("view", view);
 
         //calculo gravedad
-        // Gravedad y colisiÛn con el suelo
+        // Gravedad y colisi√≥n con el suelo
         if (camera.Position.y > groundLevel) {
             verticalVelocity += gravity * deltaTime; // Aumentar velocidad por la gravedad
-            camera.Position.y += verticalVelocity * deltaTime; // Actualizar posiciÛn
+            camera.Position.y += verticalVelocity * deltaTime; // Actualizar posici√≥n
         }
         else {
             camera.Position.y = groundLevel; // Mantener en el suelo
@@ -150,42 +144,36 @@ int main()
         // render the loaded model
         // Renderizar el escenario
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // PosiciÛn del escenario
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // Posici√≥n del escenario
         model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));	// Escalar el modelo
         ourShader.setMat4("model", model);
         escenarioModel.Draw(ourShader);
 
         // Renderizar el necromorph
         glm::mat4 necromorphTransform = glm::mat4(1.0f);
-        necromorphTransform = glm::translate(necromorphTransform, glm::vec3(2.0f, 0.0f, -3.0f)); // Mover el personaje
-        necromorphTransform = glm::scale(necromorphTransform, glm::vec3(0.05f, 0.05f, 0.05f));
+        necromorphTransform = glm::translate(necromorphTransform, glm::vec3(-0.2f, 0.02f, 3.0f)); // Mover el personaje
+        necromorphTransform = glm::scale(necromorphTransform, glm::vec3(0.1f, 0.1f, 0.1f)); // Tama√±o perfecto, no modificar.
         ourShader.setMat4("model", necromorphTransform);
         necromorphModel.Draw(ourShader);
 
         // Renderizar los zombis
         glm::mat4 zombieDogTransform = glm::mat4(1.0f);
-        zombieDogTransform = glm::translate(zombieDogTransform, glm::vec3(-2.0f, 0.0f, -1.0f)); // PosiciÛn del zombie dog
-        zombieDogTransform = glm::scale(zombieDogTransform, glm::vec3(0.03f, 0.03f, 0.03f));
+        zombieDogTransform = glm::translate(zombieDogTransform, glm::vec3(0.2f, 0.02f, 3.0f)); // Posici√≥n del zombie dog
+        zombieDogTransform = glm::scale(zombieDogTransform, glm::vec3(0.0005f, 0.0005f, 0.0005f)); // Tama√±o perfecto, no cambiar
         ourShader.setMat4("model", zombieDogTransform);
         zombieDogModel.Draw(ourShader);
 
         glm::mat4 zombie1Transform = glm::mat4(1.0f);
-        zombie1Transform = glm::translate(zombie1Transform, glm::vec3(4.0f, 0.0f, -5.0f)); // PosiciÛn del zombie 1
-        zombie1Transform = glm::scale(zombie1Transform, glm::vec3(0.04f, 0.04f, 0.04f));
+        zombie1Transform = glm::translate(zombie1Transform, glm::vec3(0.0f, 0.2f, 3.0f)); // Posici√≥n del zombie 1
+        zombie1Transform = glm::scale(zombie1Transform, glm::vec3(0.02f, 0.02f, 0.02f)); // Tama√±o perfecto, no modificar.
         ourShader.setMat4("model", zombie1Transform);
         zombie1Model.Draw(ourShader);
 
         glm::mat4 zombie2Transform = glm::mat4(1.0f);
-        zombie2Transform = glm::translate(zombie2Transform, glm::vec3(-4.0f, 0.0f, -6.0f)); // PosiciÛn del zombie 2
-        zombie2Transform = glm::scale(zombie2Transform, glm::vec3(0.04f, 0.04f, 0.04f));
+        zombie2Transform = glm::translate(zombie2Transform, glm::vec3(0.1f, 0.02f, 3.5f)); // Posici√≥n del zombie 2
+        zombie2Transform = glm::scale(zombie2Transform, glm::vec3(0.04f, 0.04f, 0.04f)); // Tama√±o perfecto, no modificar.
         ourShader.setMat4("model", zombie2Transform);
         zombie2Model.Draw(ourShader);
-
-        glm::mat4 zombie3Transform = glm::mat4(1.0f);
-        zombie3Transform = glm::translate(zombie3Transform, glm::vec3(0.0f, 0.0f, -7.0f)); // PosiciÛn del zombie 3
-        zombie3Transform = glm::scale(zombie3Transform, glm::vec3(0.04f, 0.04f, 0.04f));
-        ourShader.setMat4("model", zombie3Transform);
-        zombie3Model.Draw(ourShader);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -218,7 +206,7 @@ void processInput(GLFWwindow* window)
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, deltaTime);
     //Tocar piso
-    const float groundLevel = 0.1f; // Altura mÌnima permitida
+    const float groundLevel = 0.1f; // Altura m√≠nima permitida
     if (camera.Position.y < groundLevel) {
         camera.Position.y = groundLevel; // Evita que atraviese el piso
     }
