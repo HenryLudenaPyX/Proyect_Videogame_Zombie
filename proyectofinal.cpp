@@ -96,6 +96,8 @@ int main()
     Model zombieDogModel("modelos/zombiedog/zombiedog.obj");
     Model zombie1Model("modelos/zombie1/zombie1.obj");
     Model zombie2Model("modelos/zombie2/zombie2.obj");
+    Model skyModel("modelos/cielo/cielo.obj");
+
 
     // draw in wireframe
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -148,6 +150,19 @@ int main()
         model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));	// Escalar el modelo
         ourShader.setMat4("model", model);
         escenarioModel.Draw(ourShader);
+
+        //Renderizar el Cierlo (sky)
+        ourShader.use();
+        // Para el cielo, desactivar la iluminación
+        ourShader.setBool("useLighting", false);
+        glm::mat4 modelSky = glm::mat4(1.0f);
+        modelSky = glm::translate(modelSky, glm::vec3(0.0f, 15.0f, 0.0f));
+        modelSky = glm::scale(modelSky, glm::vec3(0.3f, 0.3f, 0.3f));
+        ourShader.setMat4("model", modelSky);
+        skyModel.Draw(ourShader);
+        // Reactivar iluminación para los siguientes objetos
+        ourShader.setBool("useLighting", true);
+        
 
         // Renderizar el necromorph
         glm::mat4 necromorphTransform = glm::mat4(1.0f);
