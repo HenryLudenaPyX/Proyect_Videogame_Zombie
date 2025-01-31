@@ -1,0 +1,11 @@
+Model Information:
+* title:	Skydome
+* source:	https://sketchfab.com/3d-models/skydome-1ceed19cc82842e785d588a2b34a8dc7
+* author:	Professor E12 (https://sketchfab.com/Professer_E12_archives)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Skydome" (https://sketchfab.com/3d-models/skydome-1ceed19cc82842e785d588a2b34a8dc7) by Professor E12 (https://sketchfab.com/Professer_E12_archives) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
