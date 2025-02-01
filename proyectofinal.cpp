@@ -39,6 +39,9 @@ bool firstMouse = true;
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
+// luna movimiento
+float angle = 0.0f;
+
 int main()
 {
     // glfw: initialize and configure
@@ -97,7 +100,7 @@ int main()
     Model zombie1Model("modelos/zombie1/zombie1.obj");
     Model zombie2Model("modelos/zombie2/zombie2.obj");
     Model skyModel("modelos/cielo/cielo.obj");
-
+    Model moonModel("modelos/moon/moon.obj");
 
     // draw in wireframe
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -189,6 +192,32 @@ int main()
         zombie2Transform = glm::scale(zombie2Transform, glm::vec3(0.04f, 0.04f, 0.04f)); // Tamaño perfecto, no modificar.
         ourShader.setMat4("model", zombie2Transform);
         zombie2Model.Draw(ourShader);
+
+        // Renderizar la Luna
+        ourShader.use();
+        ourShader.setBool("useLighting", false);
+        glm::mat4 modelMoon = glm::mat4(1.0f);
+        modelMoon = glm::translate(modelMoon, glm::vec3(0.0f, 20.0f, 0.0f));
+        modelMoon = glm::scale(modelMoon, glm::vec3(1.5f, 1.5f, 1.5f));
+        // Movimiento de la Luna
+        angle = glfwGetTime() * 11.0f;
+        modelMoon = glm::rotate(modelMoon, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelMoon = glm::translate(modelMoon, glm::vec3(0.0f, 0.0f, -5.0f));
+        // Extraer la posición de la luna (última columna de la matriz modelMoon)
+        glm::vec3 moonPos = glm::vec3(modelMoon[3][0], modelMoon[3][1], modelMoon[3][2]);
+
+        // Configurar la luz
+        ourShader.setVec3("light.position", moonPos);
+        ourShader.setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));  // Luz ambiente tenue
+        ourShader.setVec3("light.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));  // Luz difusa moderada
+        ourShader.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));  // Luz especular moderada
+        // Pasar la posición de la cámara (para el cálculo especular)
+        ourShader.setVec3("viewPos", camera.Position);
+
+        ourShader.setMat4("model", modelMoon);
+        moonModel.Draw(ourShader);
+        // Reactivar iluminación para los siguientes objetos
+        ourShader.setBool("useLighting", true);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
