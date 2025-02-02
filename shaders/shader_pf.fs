@@ -18,20 +18,20 @@ uniform Light light;
 uniform vec3 viewPos; // Posición de la cámara
 uniform bool useLighting; 
 
+// Linterna
+uniform bool flashlightOn;
+uniform vec3 flashlightPos;
+uniform vec3 flashlightDir;
+uniform float cutoff;
+uniform float outerCutoff;
+
 void main()
 {    
-    // Si no hay iluminación, solo usamos el mapa emisivo (para el cielo)
-    if (!useLighting) {
-        vec3 emissiveColor = texture(texture_emissive1, TexCoords).rgb;
-        FragColor = vec4(emissiveColor, 1.0);
-        return;
-    }
-
     // 1. Obtener texturas
     vec3 diffuseTexture = texture(texture_diffuse1, TexCoords).rgb;
-    vec3 specularTexture = texture(texture_specular1, TexCoords).rgb; // Mapa especular
+    vec3 specularTexture = texture(texture_specular1, TexCoords).rgb;
 
-    // 2. Calcular iluminación
+    // 2. Normalizar vectores
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(light.position - FragPos);
     vec3 viewDir = normalize(viewPos - FragPos);
@@ -48,8 +48,41 @@ void main()
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
     vec3 specular = light.specular * spec * specularTexture;
 
-    // 6. Resultado final
-    vec3 result = ambient + diffuse + specular;
+    vec3 flashlightEffect = vec3(0.0);
+
+    // 6. Iluminación de la linterna (spotlight)
+    if (flashlightOn) {
+        vec3 fragToFlashlight = normalize(flashlightPos - FragPos);
+        float theta = dot(normalize(flashlightDir), fragToFlashlight);
+
+        if (theta > cutoff) {
+            float intensity = smoothstep(outerCutoff, cutoff, theta);
+
+            // Luz difusa de la linterna
+            float diffFlashlight = max(dot(norm, fragToFlashlight), 0.0);
+            vec3 flashlightDiffuse = vec3(1.0, 1.0, 0.8) * intensity * diffFlashlight * diffuseTexture;
+
+            // Luz especular de la linterna
+            vec3 reflectFlashlight = reflect(-fragToFlashlight, norm);
+            float specFlashlight = pow(max(dot(viewDir, reflectFlashlight), 0.0), 32);
+            vec3 flashlightSpecular = vec3(1.0) * intensity * specFlashlight * specularTexture;
+
+            // Atenuación por distancia
+            float distance = length(flashlightPos - FragPos);
+            float attenuation = 1.0 / (1.0 + 0.09 * distance + 0.032 * (distance * distance));
+
+            flashlightEffect = (flashlightDiffuse + flashlightSpecular) * attenuation;
+        }
+    }
+
+    // 7. Combinar todas las luces
+    vec3 result = ambient + diffuse + specular + flashlightEffect;
+    
+    // 8. Si no hay iluminación, usar solo el mapa emisivo
+    if (!useLighting) {
+        result = texture(texture_emissive1, TexCoords).rgb;
+    }
+
     FragColor = vec4(result, 1.0);
 
 }
