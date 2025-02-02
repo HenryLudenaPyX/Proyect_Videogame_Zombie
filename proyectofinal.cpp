@@ -30,7 +30,7 @@ const unsigned int SCR_HEIGHT = 600;
 //gravedad
 float gravity = -9.8f; // Gravedad (en unidades/s²)
 float verticalVelocity = 0.0f; // Velocidad vertical de la cámara
-const float groundLevel = 0.7f; // Nivel del suelo
+const float groundLevel = 0.02f; // Nivel del suelo
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.02f, 3.0f));
@@ -130,7 +130,7 @@ void updateSpecialEnemy(Enemy& enemy, float deltaTime, const glm::vec3& playerPo
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 //Tiempo de inclinación
-float cameraTiltTime = 0.0f;  
+float cameraTiltTime = 0.0f;
 
 // luna movimiento
 float angle = 0.0f;
@@ -156,13 +156,13 @@ int main()
     // glfw window creation
     // --------------------
     //GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Proyecto TLoU", NULL, NULL);
-    	// Obtener el monitor principal y su resolución
-	GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
-	const GLFWvidmode* mode = glfwGetVideoMode(primaryMonitor);
+        // Obtener el monitor principal y su resolución
+    GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode(primaryMonitor);
 
-// Crear la ventana en modo pantalla completa con la resolución del monitor
-	GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "Proyecto TLoU", primaryMonitor, NULL);
-	
+    // Crear la ventana en modo pantalla completa con la resolución del monitor
+    GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "The Legacy of the Curse", primaryMonitor, NULL);
+
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -173,7 +173,7 @@ int main()
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     float aspectRatio = (float)width / (float)height;
-	
+
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
@@ -217,7 +217,7 @@ int main()
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     camera.MovementSpeed = 2; //Optional. Modify the speed of the camera
-	
+
     // Inicializar la semilla de números aleatorios
     srand(time(0));
     // shader configuration
@@ -225,7 +225,7 @@ int main()
     lightingShader.use();
     lightingShader.setInt("material.diffuse", 0);
     lightingShader.setInt("material.specular", 1);
-    
+
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -242,7 +242,7 @@ int main()
 
         // render
         // ------
-        glClearColor(0.5f, 0.5f, 0.05f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // don't forget to enable shader before setting uniforms
@@ -256,7 +256,7 @@ int main()
         glm::mat4 tilt = glm::rotate(glm::mat4(1.0f), tiltAngle, glm::vec3(0.0f, 0.0f, 1.0f));
         // Modificar la matriz de vista con inclinación
         glm::mat4 view = camera.GetViewMatrix() * tilt;
-        
+
         // view/projection transformations
         projection = glm::perspective(glm::radians(camera.Zoom), aspectRatio, 0.1f, 100.0f);
         //glm::mat4 view = camera.GetViewMatrix();
@@ -288,7 +288,7 @@ int main()
         //world transformation
         glm::mat4 model = glm::mat4(1.0f);
         lightingShader.setMat4("model", model);
-        
+
         //calculo gravedad
         // Gravedad y colisión con el suelo
         if (camera.Position.y > groundLevel) {
@@ -408,32 +408,32 @@ void processInput(GLFWwindow* window)
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, deltaTime);
     //Tocar piso
-    const float groundLevel = 0.7f; // Altura mínima permitida
+    const float groundLevel = 0.18f; // Altura mínima permitida
     if (camera.Position.y < groundLevel) {
         camera.Position.y = groundLevel; // Evita que atraviese el piso
     }
 
     //salto
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && camera.Position.y <= groundLevel + 0.01f) {
-    verticalVelocity = 5.0f; // Velocidad inicial del salto
+        verticalVelocity = 3.0f; // Velocidad inicial del salto
     }
 
     //balanceo de la camara
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS ||
-    glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-    cameraTiltTime += deltaTime * 1.0f;
+        glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        cameraTiltTime += deltaTime * 1.0f;
     }
     else {
-    cameraTiltTime = 0.0f;  // Reinicia la inclinación si el jugador está quieto
+        cameraTiltTime = 0.0f;  // Reinicia la inclinación si el jugador está quieto
     }
 
     //Apagar/Prender linterna
     static bool flashlightKeyPressed = false;
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !flashlightKeyPressed) {
-    flashlightOn= glm::vec3(0.0f, 0.0f, 0.0f);
+        flashlightOn = glm::vec3(0.0f, 0.0f, 0.0f);
     }
     else {
-	flashlightOn = glm::vec3(1.0f, 1.0f, 1.0f);
+        flashlightOn = glm::vec3(1.0f, 1.0f, 1.0f);
     }
 
 }
