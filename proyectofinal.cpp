@@ -9,6 +9,9 @@
 #include <learnopengl/camera.h>
 #include <learnopengl/model.h>
 
+#include <cstdlib> // Para rand()
+#include <ctime>   // Para seed aleatorio
+
 #include <iostream>
 
 #define STB_IMAGE_IMPLEMENTATION 
@@ -30,7 +33,7 @@ float verticalVelocity = 0.0f; // Velocidad vertical de la cámara
 const float groundLevel = 0.7f; // Nivel del suelo
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 0.02f, 3.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -38,6 +41,90 @@ bool firstMouse = true;
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
+
+// Configuración del movimiento para cada enemigo
+struct Enemy {
+    glm::vec3 position;
+    glm::vec2 direction;
+    float speed;
+    float changeDirectionTime;
+    float rotationAngle; // Nuevo: ángulo de rotación
+};
+
+// Inicialización de los enemigos con sus posiciones iniciales
+Enemy zombie1 = { glm::vec3(0.0f, 0.02f, 3.0f), glm::vec2(0.0f, 1.0f), 0.25f, 0.0f };
+Enemy zombie2 = { glm::vec3(0.1f, 0.02f, 3.5f), glm::vec2(0.0f, 1.0f), 0.2f, 0.0f };
+Enemy zombieDog = { glm::vec3(0.2f, 0.02f, 3.0f), glm::vec2(0.0f, 1.0f), 0.35f, 0.0f };
+Enemy necromorph = { glm::vec3(-0.2f, 0.02f, 3.0f), glm::vec2(0.0f, 1.0f), 0.15f, 0.0f };
+
+// Semilla de números aleatorios
+void initRandom() {
+    srand(static_cast<unsigned>(time(0)));
+}
+
+// Método para actualizar la posición de un enemigo
+void updateEnemy(Enemy& enemy, float deltaTime) {
+    enemy.changeDirectionTime += deltaTime;
+
+    // Cambio de dirección cada 1.5 segundos
+    if (enemy.changeDirectionTime >= 1.5f) {
+        int randomDirection = rand() % 4; // 0 = adelante, 1 = atrás, 2 = izquierda, 3 = derecha
+        switch (randomDirection) {
+        case 0: enemy.direction = glm::vec2(0.0f, 1.0f); break; // Adelante
+        case 1: enemy.direction = glm::vec2(0.0f, -1.0f); break; // Atrás
+        case 2: enemy.direction = glm::vec2(-1.0f, 0.0f); break; // Izquierda
+        case 3: enemy.direction = glm::vec2(1.0f, 0.0f); break; // Derecha
+        }
+        enemy.changeDirectionTime = 0.0f;
+    }
+
+    // Movimiento al enemigo en la dirección actual
+    enemy.position.x += enemy.direction.x * enemy.speed * deltaTime;
+    enemy.position.z += enemy.direction.y * enemy.speed * deltaTime;
+    enemy.position.y = groundLevel; // Mantener en el suelo
+
+    // Limitación de la posición dentro del área de juego
+    if (enemy.position.x > 2.0f) enemy.position.x = 2.0f;
+    if (enemy.position.x < -2.0f) enemy.position.x = -2.0f;
+    if (enemy.position.z > 4.0f) enemy.position.z = 4.0f;
+    if (enemy.position.z < 2.0f) enemy.position.z = 2.0f;
+}
+
+// Método para actualizar la posición de los enemigos especiales.
+void updateSpecialEnemy(Enemy& enemy, float deltaTime, const glm::vec3& playerPosition) {
+    glm::vec3 directionToPlayer = playerPosition - enemy.position;
+
+    // Normalización de la dirección para que sea un vector unitario
+    glm::vec2 normalizedDirection = glm::normalize(glm::vec2(directionToPlayer.x, directionToPlayer.z));
+
+    if (&enemy == &zombieDog) {
+        // El Zombie Dog sigue directamente al jugador
+        enemy.direction = normalizedDirection;
+    }
+    else if (&enemy == &necromorph) {
+        // Aumenta la velocidad del Necromorph para que sea más rápido
+        enemy.speed = 0.5f;
+
+        // El Necromorph persigue al jugador, pero con una ligera desviación para diferenciarse del Zombie Dog
+        glm::vec2 perpendicular(-normalizedDirection.y, normalizedDirection.x);  // Vector perpendicular
+        enemy.direction = normalizedDirection + (perpendicular * 0.3f); // Desviación leve
+        enemy.direction = glm::normalize(enemy.direction); // Normalizar para mantener la magnitud
+    }
+
+    // Mover al enemigo en la dirección calculada
+    enemy.position.x += enemy.direction.x * enemy.speed * deltaTime;
+    enemy.position.z += enemy.direction.y * enemy.speed * deltaTime;
+    enemy.position.y = groundLevel; // Mantener en el suelo
+
+    // Permite que los enemigos se acerquen más al jugador y tengan un campo de movimiento más amplio
+    if (enemy.position.x > 5.0f) enemy.position.x = 5.0f;  // Aumentar rango de movimiento en X
+    if (enemy.position.x < -5.0f) enemy.position.x = -5.0f; // Aumentar rango de movimiento en X
+    if (enemy.position.z > 5.0f) enemy.position.z = 5.0f;  // Aumentar rango de movimiento en Z
+    if (enemy.position.z < 0.5f) enemy.position.z = 0.5f;  // Permitir que se acerque más al jugador (en Z)
+
+    // Calculo del ángulo de rotación
+    enemy.rotationAngle = glm::degrees(atan2(normalizedDirection.x, normalizedDirection.y));
+}
 
 //Iluminación linterna
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
@@ -116,7 +203,9 @@ int main()
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     camera.MovementSpeed = 2; //Optional. Modify the speed of the camera
-
+	
+    // Inicializar la semilla de números aleatorios
+    srand(time(0));
     // shader configuration
     // --------------------
     lightingShader.use();
@@ -216,33 +305,39 @@ int main()
         skyModel.Draw(ourShader);
         // Reactivar iluminación para los siguientes objetos
         //ourShader.setBool("useLighting", true);
-        
 
-        // Renderizar el necromorph
-        glm::mat4 necromorphTransform = glm::mat4(1.0f);
-        necromorphTransform = glm::translate(necromorphTransform, glm::vec3(-0.2f, 0.02f, 3.0f)); // Mover el personaje
-        necromorphTransform = glm::scale(necromorphTransform, glm::vec3(0.1f, 0.1f, 0.1f)); // Tamaño perfecto, no modificar.
-        ourShader.setMat4("model", necromorphTransform);
-        necromorphModel.Draw(ourShader);
+        // Actualizar la posición de cada enemigo
+        updateEnemy(zombie1, deltaTime);
+        updateEnemy(zombie2, deltaTime);
+        updateSpecialEnemy(zombieDog, deltaTime, camera.Position);
+        updateSpecialEnemy(necromorph, deltaTime, camera.Position);
 
-        // Renderizar los zombis
-        glm::mat4 zombieDogTransform = glm::mat4(1.0f);
-        zombieDogTransform = glm::translate(zombieDogTransform, glm::vec3(0.2f, 0.02f, 3.0f)); // Posición del zombie dog
-        zombieDogTransform = glm::scale(zombieDogTransform, glm::vec3(0.0005f, 0.0005f, 0.0005f)); // Tamaño perfecto, no cambiar
-        ourShader.setMat4("model", zombieDogTransform);
-        zombieDogModel.Draw(ourShader);
+        // Dibujo de cada enemigo con su nueva posición
+        glm::mat4 transform;
 
-        glm::mat4 zombie1Transform = glm::mat4(1.0f);
-        zombie1Transform = glm::translate(zombie1Transform, glm::vec3(0.0f, 0.2f, 3.0f)); // Posición del zombie 1
-        zombie1Transform = glm::scale(zombie1Transform, glm::vec3(0.02f, 0.02f, 0.02f)); // Tamaño perfecto, no modificar.
-        ourShader.setMat4("model", zombie1Transform);
+        transform = glm::translate(glm::mat4(1.0f), zombie1.position);
+        transform = glm::rotate(transform, glm::radians(zombie1.rotationAngle), glm::vec3(0.0f, 1.0f, 0.0f)); // Rotación
+        transform = glm::scale(transform, glm::vec3(0.02f, 0.02f, 0.02f));
+        ourShader.setMat4("model", transform);
         zombie1Model.Draw(ourShader);
 
-        glm::mat4 zombie2Transform = glm::mat4(1.0f);
-        zombie2Transform = glm::translate(zombie2Transform, glm::vec3(0.1f, 0.02f, 3.5f)); // Posición del zombie 2
-        zombie2Transform = glm::scale(zombie2Transform, glm::vec3(0.04f, 0.04f, 0.04f)); // Tamaño perfecto, no modificar.
-        ourShader.setMat4("model", zombie2Transform);
+        transform = glm::translate(glm::mat4(1.0f), zombie2.position);
+        transform = glm::rotate(transform, glm::radians(zombie2.rotationAngle), glm::vec3(0.0f, 1.0f, 0.0f)); // Rotación
+        transform = glm::scale(transform, glm::vec3(0.04f, 0.04f, 0.04f));
+        ourShader.setMat4("model", transform);
         zombie2Model.Draw(ourShader);
+
+        transform = glm::translate(glm::mat4(1.0f), zombieDog.position);
+        transform = glm::rotate(transform, glm::radians(zombieDog.rotationAngle), glm::vec3(0.0f, 1.0f, 0.0f)); // Rotación
+        transform = glm::scale(transform, glm::vec3(0.0005f, 0.0005f, 0.0005f));
+        ourShader.setMat4("model", transform);
+        zombieDogModel.Draw(ourShader);
+
+        transform = glm::translate(glm::mat4(1.0f), necromorph.position);
+        transform = glm::rotate(transform, glm::radians(necromorph.rotationAngle), glm::vec3(0.0f, 1.0f, 0.0f)); // Rotación
+        transform = glm::scale(transform, glm::vec3(0.1f, 0.1f, 0.1f));
+        ourShader.setMat4("model", transform);
+        necromorphModel.Draw(ourShader);
 
         // Renderizar la Luna
         ourShader.use();
