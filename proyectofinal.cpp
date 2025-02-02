@@ -27,7 +27,7 @@ const unsigned int SCR_HEIGHT = 600;
 //gravedad
 float gravity = -9.8f; // Gravedad (en unidades/s²)
 float verticalVelocity = 0.0f; // Velocidad vertical de la cámara
-const float groundLevel = 0.0f; // Nivel del suelo
+const float groundLevel = 0.7f; // Nivel del suelo
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -39,8 +39,17 @@ bool firstMouse = true;
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
+//Iluminación linterna
+glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+
+//Tiempo de inclinación
+float cameraTiltTime = 0.0f;  
+
 // luna movimiento
 float angle = 0.0f;
+
+//Apagar/prender linterna
+glm::vec3 flashlightOn(1.0f, 1.0f, 1.0f);  // La linterna comienza encendida
 
 int main()
 {
@@ -89,6 +98,7 @@ int main()
 
     // build and compile shaders
     // -------------------------
+    Shader lightingShader("shaders/shader_exercise15t4_casters.vs", "shaders/shader_exercise15t4_casters.fs");
     Shader ourShader("shaders/shader_pf.vs", "shaders/shader_pf.fs");
 
     // load models
@@ -105,8 +115,14 @@ int main()
     // draw in wireframe
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    camera.MovementSpeed = 1; //Optional. Modify the speed of the camera
+    camera.MovementSpeed = 2; //Optional. Modify the speed of the camera
 
+    // shader configuration
+    // --------------------
+    lightingShader.use();
+    lightingShader.setInt("material.diffuse", 0);
+    lightingShader.setInt("material.specular", 1);
+    
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -128,13 +144,48 @@ int main()
 
         // don't forget to enable shader before setting uniforms
         ourShader.use();
+        ourShader.setBool("useLighting", true);
 
+        // Efecto de inclinación de cámara
+        float tiltAngle = glm::radians(1.0f) * sin(cameraTiltTime);  // Oscilación suave
+        cameraTiltTime += deltaTime * 0.5f;  // Control de velocidad del balanceo
+        // Crear matriz de rotación para la inclinación
+        glm::mat4 tilt = glm::rotate(glm::mat4(1.0f), tiltAngle, glm::vec3(0.0f, 0.0f, 1.0f));
+        // Modificar la matriz de vista con inclinación
+        glm::mat4 view = camera.GetViewMatrix() * tilt;
+        
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        glm::mat4 view = camera.GetViewMatrix();
+        //glm::mat4 view = camera.GetViewMatrix();
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
 
+        //usar lighting shader (linterna)
+        lightingShader.use();
+        lightingShader.setVec3("viewPos", camera.Position);
+        //Propiedades material
+        lightingShader.setFloat("material.shininess", 32.0f);
+        //Posición y dirección luz
+        lightingShader.setVec3("light.position", camera.Position);
+        lightingShader.setVec3("light.direction", camera.Front);
+        //Propiedades luz
+        lightingShader.setVec3("light.ambient", 0.0f, 0.0f, 0.0f);
+        //Apagar/prender linterna (Mantener presionado F para apagar la linterna) 	 
+        lightingShader.setVec3("light.diffuse", flashlightOn);
+        lightingShader.setVec3("light.specular", flashlightOn);
+        //Propiedades difracción bordes linterna
+        lightingShader.setFloat("light.constant", 1.0f);
+        lightingShader.setFloat("light.linear", 0.09f);
+        lightingShader.setFloat("light.quadratic", 0.032f);
+        lightingShader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+        lightingShader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+        //Projection y view de lighting shader
+        lightingShader.setMat4("projection", projection);
+        lightingShader.setMat4("view", view);
+        //world transformation
+        glm::mat4 model = glm::mat4(1.0f);
+        lightingShader.setMat4("model", model);
+        
         //calculo gravedad
         // Gravedad y colisión con el suelo
         if (camera.Position.y > groundLevel) {
@@ -155,16 +206,16 @@ int main()
         escenarioModel.Draw(ourShader);
 
         //Renderizar el Cierlo (sky)
-        ourShader.use();
+        //ourShader.use();
         // Para el cielo, desactivar la iluminación
-        ourShader.setBool("useLighting", false);
+        //ourShader.setBool("useLighting", false);
         glm::mat4 modelSky = glm::mat4(1.0f);
         modelSky = glm::translate(modelSky, glm::vec3(0.0f, 15.0f, 0.0f));
         modelSky = glm::scale(modelSky, glm::vec3(0.3f, 0.3f, 0.3f));
         ourShader.setMat4("model", modelSky);
         skyModel.Draw(ourShader);
         // Reactivar iluminación para los siguientes objetos
-        ourShader.setBool("useLighting", true);
+        //ourShader.setBool("useLighting", true);
         
 
         // Renderizar el necromorph
@@ -219,6 +270,7 @@ int main()
         // Reactivar iluminación para los siguientes objetos
         ourShader.setBool("useLighting", true);
 
+        lightingShader.use();
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -235,9 +287,6 @@ int main()
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow* window)
 {
-
-
-
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
@@ -250,16 +299,33 @@ void processInput(GLFWwindow* window)
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, deltaTime);
     //Tocar piso
-    const float groundLevel = 0.1f; // Altura mínima permitida
+    const float groundLevel = 0.7f; // Altura mínima permitida
     if (camera.Position.y < groundLevel) {
         camera.Position.y = groundLevel; // Evita que atraviese el piso
     }
 
     //salto
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && camera.Position.y == groundLevel) {
-        verticalVelocity = 2.0f; // Velocidad inicial del salto
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && camera.Position.y <= groundLevel + 0.01f) {
+    verticalVelocity = 5.0f; // Velocidad inicial del salto
     }
 
+    //balanceo de la camara
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS ||
+    glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+    cameraTiltTime += deltaTime * 1.0f;
+    }
+    else {
+    cameraTiltTime = 0.0f;  // Reinicia la inclinación si el jugador está quieto
+    }
+
+    //Apagar/Prender linterna
+    static bool flashlightKeyPressed = false;
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !flashlightKeyPressed) {
+    flashlightOn= glm::vec3(0.0f, 0.0f, 0.0f);
+    }
+    else {
+	flashlightOn = glm::vec3(1.0f, 1.0f, 1.0f);
+    }
 
 }
 
