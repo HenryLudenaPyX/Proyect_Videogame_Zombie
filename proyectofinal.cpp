@@ -138,6 +138,8 @@ float angle = 0.0f;
 //Apagar/prender linterna
 glm::vec3 flashlightOn(1.0f, 1.0f, 1.0f);  // La linterna comienza encendida
 
+glm::mat4 projection;
+
 int main()
 {
     // glfw: initialize and configure
@@ -153,13 +155,25 @@ int main()
 
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Proyecto TLoU", NULL, NULL);
+    //GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Proyecto TLoU", NULL, NULL);
+    	// Obtener el monitor principal y su resolución
+	GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* mode = glfwGetVideoMode(primaryMonitor);
+
+// Crear la ventana en modo pantalla completa con la resolución del monitor
+	GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "Proyecto TLoU", primaryMonitor, NULL);
+	
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         return -1;
     }
+
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    float aspectRatio = (float)width / (float)height;
+	
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
@@ -244,7 +258,7 @@ int main()
         glm::mat4 view = camera.GetViewMatrix() * tilt;
         
         // view/projection transformations
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        projection = glm::perspective(glm::radians(camera.Zoom), aspectRatio, 0.1f, 100.0f);
         //glm::mat4 view = camera.GetViewMatrix();
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
@@ -346,7 +360,7 @@ int main()
         modelMoon = glm::translate(modelMoon, glm::vec3(0.0f, 20.0f, 0.0f));
         modelMoon = glm::scale(modelMoon, glm::vec3(1.5f, 1.5f, 1.5f));
         // Movimiento de la Luna
-        angle = glfwGetTime() * 11.0f;
+        angle = glfwGetTime() * 15.0f;
         modelMoon = glm::rotate(modelMoon, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
         modelMoon = glm::translate(modelMoon, glm::vec3(0.0f, 0.0f, -5.0f));
         // Extraer la posición de la luna (última columna de la matriz modelMoon)
