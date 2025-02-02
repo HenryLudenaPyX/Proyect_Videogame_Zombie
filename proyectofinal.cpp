@@ -288,14 +288,14 @@ int main()
 
         // render the loaded model
         // Renderizar el escenario
-        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // Posición del escenario
         model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));	// Escalar el modelo
         ourShader.setMat4("model", model);
         escenarioModel.Draw(ourShader);
 
         //Renderizar el Cierlo (sky)
-        //ourShader.use();
+        ourShader.use();
         // Para el cielo, desactivar la iluminación
         //ourShader.setBool("useLighting", false);
         glm::mat4 modelSky = glm::mat4(1.0f);
