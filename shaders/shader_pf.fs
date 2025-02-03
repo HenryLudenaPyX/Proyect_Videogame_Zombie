@@ -8,6 +8,7 @@ in vec3 Normal;
 uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_emissive1;
 uniform sampler2D texture_specular1;
+
 struct Light {
     vec3 position;
     vec3 ambient;
@@ -15,15 +16,18 @@ struct Light {
     vec3 specular;
 };
 uniform Light light;
-uniform vec3 viewPos; // Posición de la cámara
+uniform vec3 viewPos;
 uniform bool useLighting; 
 
 // Linterna
 uniform bool flashlightOn;
 uniform vec3 flashlightPos;
 uniform vec3 flashlightDir;
-uniform float cutoff;
-uniform float outerCutoff;
+uniform float cutoff;       // Ángulo interno de la linterna (coseno)
+uniform float outerCutoff;  // Ángulo externo de la linterna (coseno)
+uniform float constant;     // Atenuación constante
+uniform float linear;       // Atenuación lineal
+uniform float quadratic;    // Atenuación cuadrática
 
 void main()
 {    
@@ -48,14 +52,14 @@ void main()
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
     vec3 specular = light.specular * spec * specularTexture;
 
-    vec3 flashlightEffect = vec3(0.0);
-
     // 6. Iluminación de la linterna (spotlight)
+    vec3 flashlightEffect = vec3(0.0);
     if (flashlightOn) {
         vec3 fragToFlashlight = normalize(flashlightPos - FragPos);
-        float theta = dot(normalize(flashlightDir), fragToFlashlight);
+        float theta = dot(fragToFlashlight, normalize(-flashlightDir));
 
-        if (theta > cutoff) {
+        if (theta > outerCutoff) {
+            // Intensidad suavizada entre el ángulo interno y externo
             float intensity = smoothstep(outerCutoff, cutoff, theta);
 
             // Luz difusa de la linterna
@@ -69,7 +73,7 @@ void main()
 
             // Atenuación por distancia
             float distance = length(flashlightPos - FragPos);
-            float attenuation = 1.0 / (1.0 + 0.09 * distance + 0.032 * (distance * distance));
+            float attenuation = 1.0 / (constant + linear * distance + quadratic * (distance * distance));
 
             flashlightEffect = (flashlightDiffuse + flashlightSpecular) * attenuation;
         }
@@ -84,5 +88,4 @@ void main()
     }
 
     FragColor = vec4(result, 1.0);
-
 }
