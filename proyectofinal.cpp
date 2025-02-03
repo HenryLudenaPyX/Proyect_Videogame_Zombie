@@ -23,6 +23,8 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 
+unsigned int loadTexture(const char* path);
+
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -42,8 +44,11 @@ bool firstMouse = true;
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
+glm::vec3 initialCameraPosition = glm::vec3(0.0f, 0.02f, 3.0f); // Posición inicial
+
 // Configuración del movimiento para cada enemigo
 struct Enemy {
+    glm::vec3 initialPosition;      //Posición inicial de aparición
     glm::vec3 position;
     glm::vec2 direction;
     float speed;
@@ -51,11 +56,49 @@ struct Enemy {
     float rotationAngle; // Nuevo: ángulo de rotación
 };
 
+glm::vec3 getRandomPositionAround(const glm::vec3& center, float minRadius, float maxRadius) {
+    // Generar un ángulo aleatorio
+    float angle = static_cast<float>(rand()) / RAND_MAX * 2 * glm::pi<float>();
+
+    // Generar un radio aleatorio entre minRadius y maxRadius
+    float radius = minRadius + static_cast<float>(rand()) / RAND_MAX * (maxRadius - minRadius);
+
+    // Calcular posición X y Z
+    float x = center.x + radius * cos(angle);
+    float z = center.z + radius * sin(angle);
+
+    return glm::vec3(x, center.y, z); // Mantener la Y igual al jugador
+}
+
 // Inicialización de los enemigos con sus posiciones iniciales
-Enemy zombie1 = { glm::vec3(0.0f, 0.02f, 3.0f), glm::vec2(0.0f, 1.0f), 0.25f, 0.0f };
-Enemy zombie2 = { glm::vec3(0.1f, 0.02f, 3.5f), glm::vec2(0.0f, 1.0f), 0.2f, 0.0f };
-Enemy zombieDog = { glm::vec3(0.2f, 0.02f, 3.0f), glm::vec2(0.0f, 1.0f), 0.35f, 0.0f };
-Enemy necromorph = { glm::vec3(-0.2f, 0.02f, 3.0f), glm::vec2(0.0f, 1.0f), 0.15f, 0.0f };
+Enemy zombie1 = { glm::vec3(1.0f, 0.02f, 1.0f),  glm::vec3(0.0f, 0.02f, 2.0f), glm::vec2(0.0f, 1.0f), 0.25f, 0.0f };
+Enemy zombie2 = { glm::vec3(1.0f, 0.02f, 2.5f), glm::vec3(0.1f, 0.02f, 3.5f), glm::vec2(0.0f, 1.0f), 0.25f, 0.0f };
+Enemy zombieDog = { getRandomPositionAround(initialCameraPosition, 3.0f, 5.0f), glm::vec3(0.2f, 0.02f, 3.0f), glm::vec2(0.0f, 1.0f), 0.25f, 0.0f };
+Enemy necromorph = { getRandomPositionAround(initialCameraPosition, 3.0f, 5.0f), glm::vec3(-0.2f, 0.02f, 3.0f), glm::vec2(0.0f, 1.0f), 0.25f, 0.0f };
+
+void respawnEnemies(std::vector<Enemy*>& enemies, const glm::vec3& playerPosition) {
+    for (Enemy* enemy : enemies) {
+        if (!(enemy == &zombie1 || enemy == &zombie2)) {
+            // Generar nueva posición aleatoria alrededor del jugador
+            enemy->position = getRandomPositionAround(playerPosition, 3.0f, 5.0f);
+            enemy->position.y = groundLevel; // Asegurar que estén en el suelo
+        }
+        
+    }
+}
+
+void resetPlayer(Camera& camera, std::vector<Enemy*>& enemies) {
+    camera.Position = initialCameraPosition;
+    camera.Front = glm::vec3(0.0f, 0.0f, -1.0f);
+    camera.Yaw = -90.0f;
+    camera.Pitch = 0.0f;
+    camera.updateCameraVectors();
+
+    // Reposicionar enemigos lejos del jugador
+    respawnEnemies(enemies, camera.Position);
+}
+
+std::vector<Enemy*> enemies = { &zombie1, &zombie2, &zombieDog, &necromorph };
 
 // Semilla de números aleatorios
 void initRandom() {
@@ -135,8 +178,29 @@ float cameraTiltTime = 0.0f;
 // luna movimiento
 float angle = 0.0f;
 
+//Velocidad camara
+float cameraSpeed = 1.0f; // Velocidad de movimiento de la cámara
+
 //Apagar/prender linterna
-glm::vec3 flashlightOn(1.0f, 1.0f, 1.0f);  // La linterna comienza encendida
+bool flashlightOn = true;  // La linterna comienza encendida
+
+bool checkEnemyCollision(const glm::vec3& playerPos, const std::vector<Enemy*>& enemies, float collisionThreshold = 0.5f) {
+    for (const Enemy* enemy : enemies) {
+        float distance = glm::distance(playerPos, enemy->position);
+        if (distance < collisionThreshold) {
+            return true; // Colisión detectada
+        }
+    }
+    return false;
+}
+
+void resetPlayer(Camera& camera) {
+    camera.Position = initialCameraPosition;
+    camera.Front = glm::vec3(0.0f, 0.0f, -1.0f); // Orientación inicial
+    camera.Yaw = -90.0f; // Asegura que la dirección sea consistente
+    camera.Pitch = 0.0f;
+    camera.updateCameraVectors(); 
+}
 
 glm::mat4 projection;
 
@@ -199,7 +263,7 @@ int main()
 
     // build and compile shaders
     // -------------------------
-    Shader lightingShader("shaders/shader_exercise15t4_casters.vs", "shaders/shader_exercise15t4_casters.fs");
+    
     Shader ourShader("shaders/shader_pf.vs", "shaders/shader_pf.fs");
 
     // load models
@@ -213,18 +277,42 @@ int main()
     Model skyModel("modelos/cielo/cielo.obj");
     Model moonModel("modelos/moon/moon.obj");
 
+    //TEXTURA SUELO
+    float floorVertices[] = {
+        // Posiciones        // Normales       // Coordenadas de textura
+        -50.0f, 0.0f, -50.0f,  0.0f, 1.0f, 0.0f,  0.0f,  50.0f,
+         50.0f, 0.0f, -50.0f,  0.0f, 1.0f, 0.0f,  50.0f, 50.0f,
+         50.0f, 0.0f,  50.0f,  0.0f, 1.0f, 0.0f,  50.0f,  0.0f,
+    
+        -50.0f, 0.0f, -50.0f,  0.0f, 1.0f, 0.0f,  0.0f,  50.0f,
+         50.0f, 0.0f,  50.0f,  0.0f, 1.0f, 0.0f,  50.0f,  0.0f,
+        -50.0f, 0.0f,  50.0f,  0.0f, 1.0f, 0.0f,  0.0f,   0.0f
+    };
+
+    unsigned int floorVAO, floorVBO;
+    glGenVertexArrays(1, &floorVAO);
+    glGenBuffers(1, &floorVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, floorVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(floorVertices), floorVertices, GL_STATIC_DRAW);
+
+    glBindVertexArray(floorVAO);
+    // Posiciones
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    // Normales
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    // Coordenadas UV
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+    glBindVertexArray(0);
+
+    unsigned int floorTexture = loadTexture("textures/suelo.jpeg");
     // draw in wireframe
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    camera.MovementSpeed = 2; //Optional. Modify the speed of the camera
-
     // Inicializar la semilla de números aleatorios
     srand(time(0));
-    // shader configuration
-    // --------------------
-    lightingShader.use();
-    lightingShader.setInt("material.diffuse", 0);
-    lightingShader.setInt("material.specular", 1);
 
     // render loop
     // -----------
@@ -245,13 +333,15 @@ int main()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        camera.MovementSpeed = cameraSpeed; //Optional. Modify the speed of the camera
+        
         // don't forget to enable shader before setting uniforms
         ourShader.use();
         ourShader.setBool("useLighting", true);
 
         // Efecto de inclinación de cámara
-        float tiltAngle = glm::radians(1.0f) * sin(cameraTiltTime);  // Oscilación suave
-        cameraTiltTime += deltaTime * 0.5f;  // Control de velocidad del balanceo
+        float tiltAngle = glm::radians(0.5f) * sin(cameraTiltTime);  // Oscilación suave
+        cameraTiltTime += deltaTime * 0.2f;  // Control de velocidad del balanceo
         // Crear matriz de rotación para la inclinación
         glm::mat4 tilt = glm::rotate(glm::mat4(1.0f), tiltAngle, glm::vec3(0.0f, 0.0f, 1.0f));
         // Modificar la matriz de vista con inclinación
@@ -262,32 +352,24 @@ int main()
         //glm::mat4 view = camera.GetViewMatrix();
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
-
-        //usar lighting shader (linterna)
-        lightingShader.use();
-        lightingShader.setVec3("viewPos", camera.Position);
-        //Propiedades material
-        lightingShader.setFloat("material.shininess", 32.0f);
-        //Posición y dirección luz
-        lightingShader.setVec3("light.position", camera.Position);
-        lightingShader.setVec3("light.direction", camera.Front);
-        //Propiedades luz
-        lightingShader.setVec3("light.ambient", 0.0f, 0.0f, 0.0f);
-        //Apagar/prender linterna (Mantener presionado F para apagar la linterna) 	 
-        lightingShader.setVec3("light.diffuse", flashlightOn);
-        lightingShader.setVec3("light.specular", flashlightOn);
-        //Propiedades difracción bordes linterna
-        lightingShader.setFloat("light.constant", 1.0f);
-        lightingShader.setFloat("light.linear", 0.09f);
-        lightingShader.setFloat("light.quadratic", 0.032f);
-        lightingShader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
-        lightingShader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
-        //Projection y view de lighting shader
-        lightingShader.setMat4("projection", projection);
-        lightingShader.setMat4("view", view);
+        
         //world transformation
         glm::mat4 model = glm::mat4(1.0f);
-        lightingShader.setMat4("model", model);
+
+         // render the floor
+         ourShader.use();
+         model = glm::mat4(1.0f);
+         ourShader.setMat4("model", model);
+
+         // Activar textura
+         glActiveTexture(GL_TEXTURE0);
+         glBindTexture(GL_TEXTURE_2D, floorTexture);
+         ourShader.setInt("texture_emissive1", 0); // Enlazar con el shader
+
+         // Dibujar el suelo
+         glBindVertexArray(floorVAO);
+         glDrawArrays(GL_TRIANGLES, 0, 6);
+         glBindVertexArray(0);
 
         //calculo gravedad
         // Gravedad y colisión con el suelo
@@ -300,14 +382,26 @@ int main()
             verticalVelocity = 0.0f; // Restablecer la velocidad al estar en el suelo
         }
 
+        //Uso de ourShader
+        ourShader.use();
+        ourShader.setBool("useLighting", true); // Activar iluminación
+        ourShader.setBool("flashlightOn", flashlightOn); // Estado de la linterna
+        ourShader.setVec3("flashlightPos", camera.Position); // Posición de la linterna
+        ourShader.setVec3("flashlightDir", camera.Front); // Dirección de la linterna
+        ourShader.setFloat("cutoff", glm::cos(glm::radians(12.5f))); // Ángulo interno
+        ourShader.setFloat("outerCutoff", glm::cos(glm::radians(17.5f))); // Ángulo externo
+        ourShader.setFloat("constant", 1.0f); // Atenuación constante
+        ourShader.setFloat("linear", 0.09f); // Atenuación lineal
+        ourShader.setFloat("quadratic", 0.032f); // Atenuación cuadrática
+        
         // render the loaded model
         // Renderizar el escenario
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // Posición del escenario
-        model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));	// Escalar el modelo
-        ourShader.setMat4("model", model);
+        glm::mat4 cityModel = glm::mat4(1.0f);
+        cityModel = glm::translate(cityModel, glm::vec3(0.0f, 0.0f, 0.0f)); // Posición del escenario
+        cityModel = glm::scale(cityModel, glm::vec3(0.1f, 0.1f, 0.1f));	// Escalar el modelo
+        ourShader.setMat4("model", cityModel);
         escenarioModel.Draw(ourShader);
-
+        
         //Renderizar el Cierlo (sky)
         ourShader.use();
         // Para el cielo, desactivar la iluminación
@@ -326,6 +420,12 @@ int main()
         updateSpecialEnemy(zombieDog, deltaTime, camera.Position);
         updateSpecialEnemy(necromorph, deltaTime, camera.Position);
 
+        // Verificar colisión con enemigos
+        if (checkEnemyCollision(camera.Position, enemies)) {
+        resetPlayer(camera, enemies); // Reiniciar al jugador
+        std::cout << "¡Has sido atrapado! Reiniciando posición..." << std::endl;
+        }
+        
         // Dibujo de cada enemigo con su nueva posición
         glm::mat4 transform;
 
@@ -343,7 +443,7 @@ int main()
 
         transform = glm::translate(glm::mat4(1.0f), zombieDog.position);
         transform = glm::rotate(transform, glm::radians(zombieDog.rotationAngle), glm::vec3(0.0f, 1.0f, 0.0f)); // Rotación
-        transform = glm::scale(transform, glm::vec3(0.0005f, 0.0005f, 0.0005f));
+        transform = glm::scale(transform, glm::vec3(0.0008f, 0.0008f, 0.0008f));
         ourShader.setMat4("model", transform);
         zombieDogModel.Draw(ourShader);
 
@@ -368,8 +468,8 @@ int main()
 
         // Configurar la luz
         ourShader.setVec3("light.position", moonPos);
-        ourShader.setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));  // Luz ambiente tenue
-        ourShader.setVec3("light.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));  // Luz difusa moderada
+        ourShader.setVec3("light.ambient", glm::vec3(0.05f, 0.05f, 0.05f));  // Luz ambiente tenue
+        ourShader.setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));  // Luz difusa moderada
         ourShader.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));  // Luz especular moderada
         // Pasar la posición de la cámara (para el cálculo especular)
         ourShader.setVec3("viewPos", camera.Position);
@@ -379,7 +479,6 @@ int main()
         // Reactivar iluminación para los siguientes objetos
         ourShader.setBool("useLighting", true);
 
-        lightingShader.use();
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -421,19 +520,27 @@ void processInput(GLFWwindow* window)
     //balanceo de la camara
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS ||
         glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        cameraTiltTime += deltaTime * 1.0f;
+        cameraTiltTime += deltaTime * 0.5f;
     }
     else {
         cameraTiltTime = 0.0f;  // Reinicia la inclinación si el jugador está quieto
     }
 
-    //Apagar/Prender linterna
+    /Apagar/Prender linterna
     static bool flashlightKeyPressed = false;
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !flashlightKeyPressed) {
-        flashlightOn = glm::vec3(0.0f, 0.0f, 0.0f);
+        flashlightOn = !flashlightOn; // Alternar el estado de la linterna
+        flashlightKeyPressed = true;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE) {
+        flashlightKeyPressed = false;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+        cameraSpeed = 2.0f;
     }
     else {
-        flashlightOn = glm::vec3(1.0f, 1.0f, 1.0f);
+        cameraSpeed = 1.0f;
     }
 
 }
@@ -472,4 +579,41 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     camera.ProcessMouseScroll(yoffset);
+}
+
+unsigned int loadTexture(char const* path)
+{
+    unsigned int textureID;
+    glGenTextures(1, &textureID);
+
+    int width, height, nrComponents;
+    unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
+    if (data)
+    {
+        GLenum format;
+        if (nrComponents == 1)
+            format = GL_RED;
+        else if (nrComponents == 3)
+            format = GL_RGB;
+        else if (nrComponents == 4)
+            format = GL_RGBA;
+
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        stbi_image_free(data);
+    }
+    else
+    {
+        std::cout << "Texture failed to load at path: " << path << std::endl;
+        stbi_image_free(data);
+    }
+
+    return textureID;
 }
