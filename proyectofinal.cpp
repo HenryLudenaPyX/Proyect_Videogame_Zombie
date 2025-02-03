@@ -67,21 +67,21 @@ glm::vec3 getRandomPositionAround(const glm::vec3& center, float minRadius, floa
     float x = center.x + radius * cos(angle);
     float z = center.z + radius * sin(angle);
 
-    return glm::vec3(x, center.y, z); // Mantener la Y igual al jugador
+    return glm::vec3(x, 0.005f, z); // Mantener la Y igual al jugador
 }
 
 // Inicialización de los enemigos con sus posiciones iniciales
 Enemy zombie1 = { glm::vec3(1.0f, 0.02f, 1.0f),  glm::vec3(0.0f, 0.02f, 2.0f), glm::vec2(0.0f, 1.0f), 0.25f, 0.0f };
 Enemy zombie2 = { glm::vec3(1.0f, 0.02f, 2.5f), glm::vec3(0.1f, 0.02f, 3.5f), glm::vec2(0.0f, 1.0f), 0.25f, 0.0f };
-Enemy zombieDog = { getRandomPositionAround(initialCameraPosition, 3.0f, 5.0f), glm::vec3(0.2f, 0.02f, 3.0f), glm::vec2(0.0f, 1.0f), 0.25f, 0.0f };
-Enemy necromorph = { getRandomPositionAround(initialCameraPosition, 3.0f, 5.0f), glm::vec3(-0.2f, 0.02f, 3.0f), glm::vec2(0.0f, 1.0f), 0.25f, 0.0f };
+Enemy zombieDog = { getRandomPositionAround(initialCameraPosition, 3.0f, 5.0f), glm::vec3(0.2f, 0.02f, 3.0f), glm::vec2(0.0f, 1.0f), 0.35f, 0.0f };
+Enemy necromorph = { getRandomPositionAround(initialCameraPosition, 3.0f, 5.0f), glm::vec3(-0.2f, 0.02f, 3.0f), glm::vec2(0.0f, 1.0f), 0.35f, 0.0f };
 
 void respawnEnemies(std::vector<Enemy*>& enemies, const glm::vec3& playerPosition) {
     for (Enemy* enemy : enemies) {
         if (!(enemy == &zombie1 || enemy == &zombie2)) {
             // Generar nueva posición aleatoria alrededor del jugador
             enemy->position = getRandomPositionAround(playerPosition, 3.0f, 5.0f);
-            enemy->position.y = groundLevel; // Asegurar que estén en el suelo
+            enemy->position.y = 0.005f; // Asegurar que estén en el suelo
         }
         
     }
@@ -124,7 +124,7 @@ void updateEnemy(Enemy& enemy, float deltaTime) {
     // Movimiento al enemigo en la dirección actual
     enemy.position.x += enemy.direction.x * enemy.speed * deltaTime;
     enemy.position.z += enemy.direction.y * enemy.speed * deltaTime;
-    enemy.position.y = groundLevel; // Mantener en el suelo
+    enemy.position.y = 0.005f; // Mantener en el suelo
 
     // Limitación de la posición dentro del área de juego
     if (enemy.position.x > 2.0f) enemy.position.x = 2.0f;
@@ -157,13 +157,13 @@ void updateSpecialEnemy(Enemy& enemy, float deltaTime, const glm::vec3& playerPo
     // Mover al enemigo en la dirección calculada
     enemy.position.x += enemy.direction.x * enemy.speed * deltaTime;
     enemy.position.z += enemy.direction.y * enemy.speed * deltaTime;
-    enemy.position.y = groundLevel; // Mantener en el suelo
+    enemy.position.y = 0.005f; // Mantener en el suelo
 
     // Permite que los enemigos se acerquen más al jugador y tengan un campo de movimiento más amplio
-    if (enemy.position.x > 5.0f) enemy.position.x = 5.0f;  // Aumentar rango de movimiento en X
-    if (enemy.position.x < -5.0f) enemy.position.x = -5.0f; // Aumentar rango de movimiento en X
-    if (enemy.position.z > 5.0f) enemy.position.z = 5.0f;  // Aumentar rango de movimiento en Z
-    if (enemy.position.z < 0.5f) enemy.position.z = 0.5f;  // Permitir que se acerque más al jugador (en Z)
+    if (enemy.position.x > 15.0f) enemy.position.x = 15.0f;  // Aumentar rango de movimiento en X
+    if (enemy.position.x < -15.0f) enemy.position.x = -15.0f; // Aumentar rango de movimiento en X
+    if (enemy.position.z > 15.0f) enemy.position.z = 15.0f;  // Aumentar rango de movimiento en Z
+    if (enemy.position.z < -15.0f) enemy.position.z = -15.0f;  // Permitir que se acerque más al jugador (en Z)
 
     // Calculo del ángulo de rotación
     enemy.rotationAngle = glm::degrees(atan2(normalizedDirection.x, normalizedDirection.y));
@@ -509,7 +509,6 @@ void processInput(GLFWwindow* window)
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, deltaTime);
     //Tocar piso
-    const float groundLevel = 0.18f; // Altura mínima permitida
     if (camera.Position.y < groundLevel) {
         camera.Position.y = groundLevel; // Evita que atraviese el piso
     }
