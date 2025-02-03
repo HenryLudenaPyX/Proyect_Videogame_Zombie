@@ -409,6 +409,8 @@ int main()
         glm::mat4 modelSky = glm::mat4(1.0f);
         modelSky = glm::translate(modelSky, glm::vec3(0.0f, 15.0f, 0.0f));
         modelSky = glm::scale(modelSky, glm::vec3(0.3f, 0.3f, 0.3f));
+        angle = glfwGetTime();
+        modelSky = glm::rotate(modelSky, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
         ourShader.setMat4("model", modelSky);
         skyModel.Draw(ourShader);
         // Reactivar iluminación para los siguientes objetos
@@ -526,7 +528,7 @@ void processInput(GLFWwindow* window)
         cameraTiltTime = 0.0f;  // Reinicia la inclinación si el jugador está quieto
     }
 
-    /Apagar/Prender linterna
+    //Apagar/Prender linterna
     static bool flashlightKeyPressed = false;
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !flashlightKeyPressed) {
         flashlightOn = !flashlightOn; // Alternar el estado de la linterna
