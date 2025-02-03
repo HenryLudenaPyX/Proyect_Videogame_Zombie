@@ -32,7 +32,7 @@ const unsigned int SCR_HEIGHT = 600;
 //gravedad
 float gravity = -9.8f; // Gravedad (en unidades/s²)
 float verticalVelocity = 0.0f; // Velocidad vertical de la cámara
-const float groundLevel = 0.02f; // Nivel del suelo
+const float groundLevel = 0.18f; // Nivel del suelo
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.02f, 3.0f));
